@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário editorial — LinkedIn KwikLedgers · Setembro 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F6F4;--card:#FFFFFF;--border:#E4E4E1;--border-soft:#EDEDEA;--empty:#EFEFEC;
+  --ink:#1A1A1A;--muted:#84847E;--muted-2:#A3A39D;
+  --blue:#1F3FD0;--blue-bg:#E7ECFB;
+  --green:#1E6B44;--green-bg:#E3F3E9;--green-line:#2E8B57;
+  --amber:#8A6520;--amber-bg:#FAF0D8;
+  --red:#C0392B;--red-bg:#FCE8E6;--grey-bg:#F0F0EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:15px;line-height:1.58;-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+.topbar{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1500px;margin:0 auto;padding:11px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brand a{color:var(--blue);font-weight:700;font-size:16px;text-decoration:none;letter-spacing:-.02em}
+.brand p{color:var(--muted);font-size:12.5px;margin-top:1px}
+.tabs{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.tab{font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);background:var(--card);border:1px solid var(--border);border-radius:999px;padding:6px 14px;cursor:pointer;text-decoration:none;display:inline-block;transition:background .15s,border-color .15s,color .15s}
+.tab:hover{background:var(--grey-bg)}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.sec{padding:40px 0 6px;scroll-margin-top:74px}
+.sec:last-of-type{padding-bottom:50px}
+h1{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.15}
+.sub{color:var(--muted);font-size:14.5px;margin-top:9px}
+h2{font-size:21px;font-weight:700;letter-spacing:-.025em;margin-bottom:18px}
+.divider{height:1px;background:var(--border);margin:40px 0 0}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:12px;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:15px 16px}
+.stat .k{font-size:12.5px;color:var(--muted)}
+.stat .v{font-size:26px;font-weight:700;letter-spacing:-.03em;margin:6px 0 5px}
+.stat .s{font-size:12px;color:var(--muted-2);line-height:1.4}
+
+.legend{display:flex;align-items:center;flex-wrap:wrap;margin-top:24px;font-size:13px;color:var(--muted)}
+.legend .pair{display:flex;align-items:center;gap:7px;margin-right:20px;margin-bottom:6px}
+.swatch{width:13px;height:13px;border-radius:3px;background:var(--green-line)}
+
+.pill{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.pill.pdf{background:var(--blue-bg);color:var(--blue)}
+.pill.est{background:var(--green-bg);color:var(--green)}
+.pill.top{background:var(--red-bg);color:var(--red)}
+.pill.obj{background:var(--grey-bg);color:var(--muted)}
+.pill.val{background:var(--amber-bg);color:var(--amber)}
+
+.weekhead{display:flex;align-items:center;gap:15px;margin:34px 0 15px}
+.weekhead span{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.weekhead .line{flex:1;height:1px;background:var(--border)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.daylabel{text-align:center;font-size:12.5px;color:var(--muted);margin-bottom:9px}
+.cell{min-height:170px}
+.empty{background:var(--empty);border-radius:10px;height:100%;min-height:170px}
+.dcard{display:flex;flex-direction:column;width:100%;text-align:left;font-family:inherit;cursor:pointer;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 13px;height:100%;min-height:170px;color:inherit;text-decoration:none;transition:box-shadow .15s,transform .15s}
+.dcard:hover{box-shadow:0 3px 12px rgba(0,0,0,.07);transform:translateY(-1px)}
+.dcard:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.dcard.prio{border-color:var(--green-line)}
+.dcard .dt{font-size:12px;color:var(--muted);margin-bottom:9px}
+.dcard .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.dcard .ttl{font-size:14px;font-weight:600;line-height:1.34;letter-spacing:-.015em}
+.dcard .obj{font-size:12px;color:var(--muted);margin-top:auto;padding-top:10px}
+
+.post{background:var(--card);border:1px solid var(--border);border-radius:11px;margin-bottom:24px;overflow:hidden;scroll-margin-top:74px}
+.post.prio{border-color:var(--green-line)}
+.post-head{padding:19px 22px 17px;border-bottom:1px solid var(--border-soft)}
+.post-head .tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.post-head h3{font-size:18.5px;font-weight:700;letter-spacing:-.025em;line-height:1.3}
+.post-head .meta{color:var(--muted);font-size:13px;margin-top:7px}
+.post-sec{padding:18px 22px 21px}
+.post-sec+.post-sec{border-top:1px solid var(--border-soft)}
+.seclabel{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:13px}
+.line{display:grid;grid-template-columns:104px 1fr;gap:18px;padding:11px 0;border-bottom:1px solid var(--border-soft)}
+.line:last-child{border-bottom:none}
+.line .lft{font-size:12.5px;color:var(--muted);line-height:1.45}
+.line .lft b{display:block;font-weight:400}
+.line .rgt .on{color:var(--blue);font-weight:600;font-size:14.5px;line-height:1.5}
+.line .rgt .art{color:var(--muted);font-style:italic;font-size:13.5px;margin-top:6px;line-height:1.55}
+.capbox{background:#FAFAF9;border:1px solid var(--border);border-radius:9px;padding:18px 20px;font-size:14.5px;line-height:1.7;white-space:pre-wrap}
+.callout{border-left:3px solid var(--border);background:var(--grey-bg);padding:11px 15px;border-radius:0 7px 7px 0;font-size:13.5px;color:var(--muted);margin-top:13px}
+.callout b{color:var(--ink);font-weight:600}
+.callout.warn{border-left-color:#D9A441;background:var(--amber-bg)}
+.callout.info{border-left-color:var(--blue);background:var(--blue-bg)}
+.callout.ok{border-left-color:var(--green-line);background:var(--green-bg)}
+
+.cards4{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:20px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 18px 20px}
+.scard h4{font-size:15px;font-weight:700;letter-spacing:-.02em;margin-bottom:11px}
+.scard p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.scard p+p{margin-top:6px}
+
+footer{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:22px;text-align:center;color:var(--muted);font-size:13.5px;margin:38px 0 56px}
+footer p+p{margin-top:6px;font-size:12.5px;color:var(--muted-2)}
+
+@media (max-width:940px){
+  .grid{grid-template-columns:1fr}
+  .cell,.dcard,.empty{min-height:0}
+  .empty{display:none}
+  .daylabel{text-align:left}
+  h1{font-size:25px}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  .topbar-in{padding:10px 16px}
+  .line{grid-template-columns:1fr;gap:5px}
+  .post-head,.post-sec{padding-left:15px;padding-right:15px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <a href="#cal">KwikLedgers · LinkedIn</a>
+      <p>Calendário editorial · Setembro 2026</p>
+    </div>
+    <nav class="tabs">
+      <a class="tab" href="#cal" data-t="cal">Calendário</a>
+      <a class="tab" href="#s1" data-t="s1">Sem 1</a>
+      <a class="tab" href="#s2" data-t="s2">Sem 2</a>
+      <a class="tab" href="#s3" data-t="s3">Sem 3</a>
+      <a class="tab" href="#s4" data-t="s4">Sem 4</a>
+      <a class="tab" href="#s5" data-t="s5">Sem 5</a>
+      <a class="tab" href="#prod" data-t="prod">Produção</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ CALENDÁRIO ============ -->
+<section class="sec" id="cal">
+  <div class="wrap">
+    <h1>Calendário editorial — setembro 2026</h1>
+    <p class="sub">LinkedIn · página KwikLedgers · 9 posts · 5 semanas · conteúdo em inglês</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Total de posts</div><div class="v">9</div><div class="s">1 a 29 de setembro</div></div>
+      <div class="stat"><div class="k">PDF</div><div class="v">5</div><div class="s">7 e 8 páginas</div></div>
+      <div class="stat"><div class="k">Estáticos</div><div class="v">4</div><div class="s">1 imagem cada</div></div>
+      <div class="stat"><div class="k">Frequência</div><div class="v">2</div><div class="s">posts/semana</div></div>
+      <div class="stat"><div class="k">Formato das peças</div><div class="v">1080</div><div class="s">×1350 vertical</div></div>
+      <div class="stat"><div class="k">Posts prioritários</div><div class="v">4</div><div class="s">produzir primeiro</div></div>
+    </div>
+
+    <div class="legend">
+      <span class="pair"><span class="pill pdf">PDF</span> documento de várias páginas</span>
+      <span class="pair"><span class="pill est">Estático</span> imagem única</span>
+      <span class="pair"><span class="pill val">validar fiscal</span> não publicar sem retorno</span>
+      <span class="pair"><span class="swatch"></span> borda verde = post prioritário</span>
+    </div>
+
+    <div class="weekhead"><span>Semana 1 — 31 ago a 4 set</span><span class="line"></span></div>
+    <div class="grid">
+      <div><div class="daylabel">Seg 31/ago</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Ter 01/set</div><div class="cell">
+        <a class="dcard prio" href="#p1"><span class="dt">01/set</span>
+          <span class="tags"><span class="pill pdf">PDF</span><span class="pill top">top</span><span class="pill val">validar</span></span>
+          <span class="ttl">The 183 days that make you a US taxpayer</span>
+          <span class="obj">7 páginas</span></a>
+      </div></div>
+      <div><div class="daylabel">Qua 02/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Qui 03/set</div><div class="cell">
+        <a class="dcard" href="#p2"><span class="dt">03/set</span>
+          <span class="tags"><span class="pill est">Estático</span></span>
+          <span class="ttl">Two obligations, one date</span>
+          <span class="obj">1 imagem</span></a>
+      </div></div>
+      <div><div class="daylabel">Sex 04/set</div><div class="cell"><div class="empty"></div></div></div>
+    </div>
+
+    <div class="weekhead"><span>Semana 2 — 7 a 11 set</span><span class="line"></span></div>
+    <div class="grid">
+      <div><div class="daylabel">Seg 07/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Ter 08/set</div><div class="cell">
+        <a class="dcard prio" href="#p3"><span class="dt">08/set</span>
+          <span class="tags"><span class="pill pdf">PDF</span><span class="pill top">top</span><span class="pill val">validar</span></span>
+          <span class="ttl">The filing most foreign-owned LLCs don't know exists</span>
+          <span class="obj">8 páginas</span></a>
+      </div></div>
+      <div><div class="daylabel">Qua 09/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Qui 10/set</div><div class="cell">
+        <a class="dcard" href="#p4"><span class="dt">10/set</span>
+          <span class="tags"><span class="pill est">Estático</span></span>
+          <span class="ttl">Five days</span>
+          <span class="obj">1 imagem</span></a>
+      </div></div>
+      <div><div class="daylabel">Sex 11/set</div><div class="cell"><div class="empty"></div></div></div>
+    </div>
+
+    <div class="weekhead"><span>Semana 3 — 14 a 18 set</span><span class="line"></span></div>
+    <div class="grid">
+      <div><div class="daylabel">Seg 14/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Ter 15/set</div><div class="cell">
+        <a class="dcard" href="#p5"><span class="dt">15/set</span>
+          <span class="tags"><span class="pill est">Estático</span></span>
+          <span class="ttl">Today</span>
+          <span class="obj">1 imagem · publicar cedo</span></a>
+      </div></div>
+      <div><div class="daylabel">Qua 16/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Qui 17/set</div><div class="cell">
+        <a class="dcard prio" href="#p6"><span class="dt">17/set</span>
+          <span class="tags"><span class="pill pdf">PDF</span><span class="pill top">top</span></span>
+          <span class="ttl">Taxed on money that never reached your account</span>
+          <span class="obj">7 páginas</span></a>
+      </div></div>
+      <div><div class="daylabel">Sex 18/set</div><div class="cell"><div class="empty"></div></div></div>
+    </div>
+
+    <div class="weekhead"><span>Semana 4 — 21 a 25 set</span><span class="line"></span></div>
+    <div class="grid">
+      <div><div class="daylabel">Seg 21/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Ter 22/set</div><div class="cell">
+        <a class="dcard prio" href="#p7"><span class="dt">22/set</span>
+          <span class="tags"><span class="pill pdf">PDF</span><span class="pill top">top</span><span class="pill val">validar</span></span>
+          <span class="ttl">The entity question a foreign founder should actually be asking</span>
+          <span class="obj">8 páginas</span></a>
+      </div></div>
+      <div><div class="daylabel">Qua 23/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Qui 24/set</div><div class="cell">
+        <a class="dcard" href="#p8"><span class="dt">24/set</span>
+          <span class="tags"><span class="pill est">Estático</span><span class="pill val">validar</span></span>
+          <span class="ttl">Your registered agent is not an office</span>
+          <span class="obj">1 imagem</span></a>
+      </div></div>
+      <div><div class="daylabel">Sex 25/set</div><div class="cell"><div class="empty"></div></div></div>
+    </div>
+
+    <div class="weekhead"><span>Semana 5 — 28 a 30 set</span><span class="line"></span></div>
+    <div class="grid">
+      <div><div class="daylabel">Seg 28/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Ter 29/set</div><div class="cell">
+        <a class="dcard prio" href="#p9"><span class="dt">29/set</span>
+          <span class="tags"><span class="pill pdf">PDF</span><span class="pill top">top</span><span class="pill val">validar</span></span>
+          <span class="ttl">The company you stopped using didn't stop filing</span>
+          <span class="obj">8 páginas</span></a>
+      </div></div>
+      <div><div class="daylabel">Qua 30/set</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Qui —</div><div class="cell"><div class="empty"></div></div></div>
+      <div><div class="daylabel">Sex —</div><div class="cell"><div class="empty"></div></div></div>
+    </div>
+
+    <div class="callout warn" style="margin-top:28px"><b>Kleyton — cinco posts precisam de retorno antes de ir ao ar.</b> Os de 01/set, 08/set, 22/set, 24/set e 29/set estão marcados com "validar". A arte pode ser produzida normalmente; o que não pode é publicar sem o aval. Fala comigo que eu levo pro fiscal.</div>
+    <div class="callout info"><b>Nenhum post deste calendário depende de agenda de terceiros.</b> Tudo que é preciso para produzir está aqui — as pendências são só de conferência fiscal, e cada uma diz exatamente o que precisa ser confirmado.</div>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 1 ============ -->
+<section class="sec" id="s1">
+  <div class="wrap">
+    <h2>Semana 1 — 31 de agosto a 4 de setembro</h2>
+
+    <article class="post prio" id="p1">
+      <div class="post-head">
+        <div class="tags"><span class="pill pdf">PDF · 7 páginas</span><span class="pill top">Prioritário</span><span class="pill val">validar fiscal</span></div>
+        <h3>The 183 days that make you a US taxpayer</h3>
+        <p class="meta">01/set (ter) · publicar 9h–10h ET (10h–11h BRT) · PDF vertical 1080×1350 · 7 páginas</p>
+      </div>
+
+      <div class="post-sec">
+        <div class="seclabel">Páginas do PDF — texto na peça + direção de arte</div>
+        <div class="line"><div class="lft">01<b>Capa</b></div><div class="rgt">
+          <div class="on">"You don't need a Green Card to become a US taxpayer. You need days."</div>
+          <div class="art">Fundo escuro, tipografia condensada muito grande. Sem logo nesta página. A capa é uma afirmação, não uma peça de marca.</div></div></div>
+        <div class="line"><div class="lft">02<b>O que está<br>em jogo</b></div><div class="rgt">
+          <div class="on">What US tax residency actually changes</div>
+          <div class="art">Texto: "It is not about immigration status. A US tax resident reports worldwide income to the IRS and discloses foreign financial accounts — including companies, investments and assets held outside the country." Arte: globo simples com um recorte destacando os EUA.</div></div></div>
+        <div class="line"><div class="lft">03<b>A regra</b></div><div class="rgt">
+          <div class="on">The substantial presence test</div>
+          <div class="art">Texto: "Two conditions have to be met in the same year: at least 31 days of physical presence in the current year, and 183 days across a three-year window." Arte: duas condições lado a lado com um sinal de "+" entre elas.</div></div></div>
+        <div class="line"><div class="lft">04<b>A pegadinha</b></div><div class="rgt">
+          <div class="on">The three years aren't weighted equally</div>
+          <div class="art">Texto: "Days in the current year count in full. Days in the previous year count as one third. Days in the year before that count as one sixth. This is where the math surprises people." Arte: três barras de alturas diferentes, rotuladas 1 · 1/3 · 1/6.</div></div></div>
+        <div class="line"><div class="lft">05<b>O exemplo</b></div><div class="rgt">
+          <div class="on">120 days a year is fine. 130 is not.</div>
+          <div class="art">Texto: "120 days for three consecutive years: 120 + 40 + 20 = 180. Below the threshold. 130 days for three consecutive years: 130 + 43 + 22 = 195. Above it. Ten days a year is the entire difference." Arte: duas colunas de cálculo, a segunda destacada em âmbar.</div></div></div>
+        <div class="line"><div class="lft">06<b>As saídas</b></div><div class="rgt">
+          <div class="on">The exceptions are not automatic</div>
+          <div class="art">Texto: "There are relief routes for people who meet the test but have a closer connection to another country, and for residents of countries with a US tax treaty. Both have to be claimed on a filing. Neither happens by itself." Arte: duas portas, ambas com um cadeado pequeno e a palavra "filed" ao lado.</div></div></div>
+        <div class="line"><div class="lft">07<b>Pergunta</b></div><div class="rgt">
+          <div class="on">"How many days have you spent in the US over the last three years — counted, not estimated?"</div>
+          <div class="art">Fundo claro, pergunta grande, logo KwikLedgers discreto no rodapé. Sem botão e sem URL.</div></div></div>
+      </div>
+
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">You can become a US taxpayer without ever applying for anything.
+
+Not a Green Card. Not a visa change. Just days.
+
+US tax residency is decided by a physical presence test, and once you meet it, the consequences are wide: worldwide income reported to the IRS, and foreign financial accounts, companies and investments disclosed.
+
+The test has two parts that must be met in the same year. At least 31 days of presence in the current year, and 183 days across a three-year window.
+
+The second part is where people get caught, because the three years don't count equally.
+
+Current year: every day counts in full.
+Previous year: each day counts as one third.
+The year before that: each day counts as one sixth.
+
+Run the math on a routine that looks harmless.
+
+120 days a year, three years running: 120 + 40 + 20 = 180. You're under.
+130 days a year, three years running: 130 + 43 + 22 = 195. You're over.
+
+Ten days a year is the whole difference between a business trip pattern and a worldwide reporting obligation.
+
+There are relief routes — for people with a closer connection to another country, and for residents of treaty countries. Both have to be claimed on a filing. Neither applies automatically, and neither applies retroactively to a year nobody looked at.
+
+If you run a business outside the US and travel here regularly, this is worth counting rather than assuming.
+
+How many days have you spent in the US over the last three years — counted, or estimated?</div>
+        <div class="callout warn"><b>Validação fiscal obrigatória.</b> Confirmar antes de publicar: os pesos de 1, 1/3 e 1/6 e o mínimo de 31 dias vigentes para 2026; a redação sobre as duas rotas de alívio; e se vale nomear os formulários específicos ou manter no nível conceitual, como está aqui.</div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <article class="post" id="p2">
+      <div class="post-head">
+        <div class="tags"><span class="pill est">Estático · 1 imagem</span></div>
+        <h3>Two obligations, one date</h3>
+        <p class="meta">03/set (qui) · publicar 9h–10h ET (10h–11h BRT) · imagem estática 1080×1350</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Arte — o que vai na imagem</div>
+        <div class="line"><div class="lft">Fundo</div><div class="rgt"><div class="art">Fundo escuro sólido. Composição centrada, muito respiro.</div></div></div>
+        <div class="line"><div class="lft">Elemento<b>principal</b></div><div class="rgt">
+          <div class="on">Um bloco de calendário marcando SEP 15</div>
+          <div class="art">Duas linhas saindo da data para lados opostos. Esquerda: "Q3 ESTIMATED TAX". Direita: "EXTENDED 1120-S / 1065". As duas linhas com a mesma espessura, para reforçar que têm o mesmo peso.</div></div></div>
+        <div class="line"><div class="lft">Texto<b>de apoio</b></div><div class="rgt">
+          <div class="on">"Most people have one of these on the calendar."</div>
+          <div class="art">Abaixo do bloco, em corpo pequeno e cinza. Logo KwikLedgers no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">September 15 is two deadlines wearing the same date.
+
+The first is the Q3 estimated tax payment. Miss it and the penalty accrues quietly, in the background, showing up months later attached to a number you didn't expect.
+
+The second is the extended filing deadline for calendar-year partnerships and S corporations that took an extension back in March. Miss that one and the penalty is loud — assessed per partner or shareholder, per month, whether or not the entity owes a dollar of tax.
+
+They come from opposite directions, which is why most owners have exactly one of them on the calendar.
+
+If you're a partner in an entity and you also pay your own estimated tax, both land on you the same day.
+
+Twelve days out is still early. Next week it's a scramble.
+
+Which of the two is already handled on your side?</div>
+        <div class="callout"><b>Link:</b> nenhum. A pergunta final é o CTA.</div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 2 ============ -->
+<section class="sec" id="s2">
+  <div class="wrap">
+    <h2>Semana 2 — 7 a 11 de setembro</h2>
+
+    <article class="post prio" id="p3">
+      <div class="post-head">
+        <div class="tags"><span class="pill pdf">PDF · 8 páginas</span><span class="pill top">Prioritário</span><span class="pill val">validar fiscal</span></div>
+        <h3>The filing most foreign-owned LLCs don't know exists</h3>
+        <p class="meta">08/set (ter) · publicar 9h–10h ET (10h–11h BRT) · PDF vertical 1080×1350 · 8 páginas</p>
+      </div>
+
+      <div class="post-sec">
+        <div class="seclabel">Páginas do PDF — texto na peça + direção de arte</div>
+        <div class="line"><div class="lft">01<b>Capa</b></div><div class="rgt">
+          <div class="on">"No profit. No tax owed. A five-figure penalty anyway."</div>
+          <div class="art">Fundo escuro, três frases empilhadas, a última em âmbar. Sem logo.</div></div></div>
+        <div class="line"><div class="lft">02<b>Quem<br>é atingido</b></div><div class="rgt">
+          <div class="on">Who this applies to</div>
+          <div class="art">Texto: "A US LLC with a single owner who is not a US person. The structure thousands of foreign entrepreneurs open every year — often the simplest one their advisor recommended." Arte: silhueta de uma empresa com uma seta vindo de fora do país.</div></div></div>
+        <div class="line"><div class="lft">03<b>O paradoxo</b></div><div class="rgt">
+          <div class="on">Disregarded for tax. Not disregarded for reporting.</div>
+          <div class="art">Texto: "For income tax purposes this entity is treated as if it didn't exist separately from its owner. That is exactly why owners assume there is nothing to file. The reporting obligation runs on a different track." Arte: duas trilhas paralelas, uma esmaecida e outra em destaque.</div></div></div>
+        <div class="line"><div class="lft">04<b>A obrigação</b></div><div class="rgt">
+          <div class="on">An information return, filed on its own</div>
+          <div class="art">Texto: "The entity has to report its transactions with its foreign owner and with related parties, on a dedicated form attached to a return the entity files purely for this purpose." Arte: um formulário grampeado a outro, ícone simples.</div></div></div>
+        <div class="line"><div class="lft">05<b>O que conta<br>como transação</b></div><div class="rgt">
+          <div class="on">The list is broader than people expect</div>
+          <div class="art">Texto: "It is not limited to sales. Money the owner puts into the company and money the owner takes out are reportable. So are loans, and amounts paid on the entity's behalf. Many owners with 'no activity' still have reportable transactions." Arte: quatro ícones em linha — aporte, retirada, empréstimo, pagamento por conta.</div></div></div>
+        <div class="line"><div class="lft">06<b>A penalidade</b></div><div class="rgt">
+          <div class="on">A fixed amount, unrelated to what you earned</div>
+          <div class="art">Texto: "The penalty for failing to file is a flat five-figure amount per year, and it does not scale down because the company was dormant or unprofitable. It is one of the few penalties in the US system with no relationship to income." Arte: número grande, com "per year" pequeno ao lado.</div></div></div>
+        <div class="line"><div class="lft">07<b>O erro<br>que se repete</b></div><div class="rgt">
+          <div class="on">"We didn't operate, so we didn't file"</div>
+          <div class="art">Texto: "The most common version of this problem isn't evasion. It's an owner who opened the entity, funded it, didn't trade, and reasonably concluded there was nothing to report." Arte: fundo âmbar claro, frase entre aspas grandes.</div></div></div>
+        <div class="line"><div class="lft">08<b>Pergunta</b></div><div class="rgt">
+          <div class="on">"If you own a US LLC from abroad — do you know whether this filing was made for last year?"</div>
+          <div class="art">Fundo claro, pergunta grande, logo KwikLedgers discreto no rodapé.</div></div></div>
+      </div>
+
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">A US LLC with a foreign owner can have no revenue, no profit and no tax due — and still owe a five-figure penalty for a form nobody mentioned.
+
+Here's the setup that produces it.
+
+A single-member LLC owned by someone who isn't a US person is disregarded for income tax purposes. Treated as if it doesn't exist separately from its owner. Which is precisely why owners conclude there's nothing to file.
+
+The income tax treatment and the reporting obligation run on different tracks.
+
+The entity has to report its transactions with its foreign owner and related parties, on a dedicated information form, attached to a return the entity files for that purpose alone.
+
+And "transactions" is broader than it sounds. It isn't limited to sales. Money the owner puts in is reportable. Money the owner takes out is reportable. So are loans and amounts paid on the entity's behalf.
+
+Which means the classic case — "we opened it, funded it, never operated" — usually has reportable transactions anyway.
+
+The penalty for missing it is a flat annual amount in the five figures. It doesn't scale down for a dormant company. It has no relationship to income, because it isn't an income tax penalty at all.
+
+This is rarely evasion. It's almost always someone who opened a structure abroad, was told it was the simple option, and was never told what the simple option still requires.
+
+If you own a US LLC from outside the country: do you know whether this filing was made for last year?</div>
+        <div class="callout warn"><b>Validação fiscal obrigatória — este é o post mais sensível do mês.</b> Confirmar antes de escrever a peça final: qual formulário exatamente se aplica e a quem; o valor da penalidade vigente para 2026; a lista do que conta como transação reportável; e se o time quer nomear o formulário na peça ou manter a descrição genérica, como está no rascunho. <b>Kleyton: não produzir a arte da página 06 antes do valor confirmado.</b></div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <article class="post" id="p4">
+      <div class="post-head">
+        <div class="tags"><span class="pill est">Estático · 1 imagem</span></div>
+        <h3>Five days</h3>
+        <p class="meta">10/set (qui) · publicar 9h–10h ET (10h–11h BRT) · imagem estática 1080×1350</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Arte — o que vai na imagem</div>
+        <div class="line"><div class="lft">Fundo</div><div class="rgt"><div class="art">Fundo branco ou muito claro — quebra deliberada do padrão escuro do mês, para destacar no feed. É a única peça clara de setembro junto com a de 15/set.</div></div></div>
+        <div class="line"><div class="lft">Elemento<b>principal</b></div><div class="rgt">
+          <div class="on">"5 DAYS"</div>
+          <div class="art">Em preto, tipografia condensada, ocupando o centro da peça. Nada mais compete com esse elemento.</div></div></div>
+        <div class="line"><div class="lft">Texto<b>de apoio</b></div><div class="rgt">
+          <div class="on">"September 15 — Q3 estimated tax + extended 1120-S and 1065 returns."</div>
+          <div class="art">Uma linha abaixo do número, corpo pequeno. Logo KwikLedgers no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">Five days.
+
+Five days is enough to file a return that's ready. It isn't enough to close six months of books.
+
+That distinction is the whole conversation.
+
+If your extended partnership or S corporation return is drafted and waiting on a signature, this week is administration. Get it in.
+
+If the return isn't drafted because the bookkeeping behind it isn't done, the deadline isn't your actual problem. The deadline is just where the problem became visible.
+
+Those are two different situations and they need two different responses. The first one is a process. The second one is a rebuild — and the rebuild is much cheaper to start in September than in January, when the same books also have to support a filing season.
+
+Neither situation is unusual. What separates them is how long the gap has been allowed to run.
+
+Where does your entity stand right now — ready, close, or not close?</div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 3 ============ -->
+<section class="sec" id="s3">
+  <div class="wrap">
+    <h2>Semana 3 — 14 a 18 de setembro</h2>
+
+    <article class="post" id="p5">
+      <div class="post-head">
+        <div class="tags"><span class="pill est">Estático · 1 imagem</span></div>
+        <h3>Today</h3>
+        <p class="meta">15/set (ter) · publicar 8h–9h ET (9h–10h BRT) — mais cedo que o padrão, é dia de prazo · imagem estática 1080×1350</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Arte — o que vai na imagem</div>
+        <div class="line"><div class="lft">Fundo</div><div class="rgt"><div class="art">Fundo claro. Peça minimalista — é a mais simples do mês, de propósito.</div></div></div>
+        <div class="line"><div class="lft">Elemento<b>principal</b></div><div class="rgt">
+          <div class="on">"TODAY"</div>
+          <div class="art">Uma palavra só, em preto, muito grande, centralizada. Sem data, sem ícone, sem linha de apoio.</div></div></div>
+        <div class="line"><div class="lft">Rodapé</div><div class="rgt"><div class="art">Logo KwikLedgers discreto. Nada mais.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">Today.
+
+Q3 estimated tax payment. Extended Form 1065 and Form 1120-S returns.
+
+If it's filed and paid, this is a good day.
+
+If it isn't, the only useful move left is the one that stops the clock. File, then fix. The late-filing penalty on these returns is assessed per partner per month, so a return filed late today costs meaningfully less than the same return filed in October.
+
+And if today caught you by surprise, that's the actual signal. Not the deadline — the surprise. A close that runs on schedule doesn't produce surprises in September.
+
+October 15 is next, for extended individual returns and C corporations.
+
+Is that one already on your calendar?</div>
+        <div class="callout"><b>Post curto de propósito.</b> Dia de prazo compete com a caixa de entrada de todo mundo. Sem PDF, sem link, sem CTA comercial.</div>
+      </div>
+    </article>
+
+    <article class="post prio" id="p6">
+      <div class="post-head">
+        <div class="tags"><span class="pill pdf">PDF · 7 páginas</span><span class="pill top">Prioritário</span></div>
+        <h3>Taxed on money that never reached your account</h3>
+        <p class="meta">17/set (qui) · publicar 9h–10h ET (10h–11h BRT) · PDF vertical 1080×1350 · 7 páginas</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Páginas do PDF — texto na peça + direção de arte</div>
+        <div class="line"><div class="lft">01<b>Capa</b></div><div class="rgt">
+          <div class="on">"The business had its best year. You left the money in. You still owe the tax."</div>
+          <div class="art">Fundo escuro, três frases empilhadas em ritmo curto. Sem logo.</div></div></div>
+        <div class="line"><div class="lft">02<b>A mecânica</b></div><div class="rgt">
+          <div class="on">How pass-through taxation actually works</div>
+          <div class="art">Texto: "Partnerships and S corporations don't pay federal income tax. They report each owner's share of income on a Schedule K-1, and the owner carries those figures onto a personal return — whether or not any money moved." Arte: diagrama entidade → K-1 → declaração pessoal.</div></div></div>
+        <div class="line"><div class="lft">03<b>A distinção</b></div><div class="rgt">
+          <div class="on">Allocated is not distributed</div>
+          <div class="art">Texto: "Your K-1 reports your share of what the entity earned. Not your share of what it paid you. Reinvest the profit into inventory, equipment or hiring and the earnings are still allocated to you." Arte: duas colunas contrastantes, "allocated" cheia e "distributed" quase vazia.</div></div></div>
+        <div class="line"><div class="lft">04<b>Onde<br>vira problema</b></div><div class="rgt">
+          <div class="on">Growth consumes its own profit</div>
+          <div class="art">Texto: "The better the year, the larger the allocation — and the more likely the owner has a tax bill with no corresponding deposit to pay it from. Strong years produce this more often than weak ones." Arte: duas linhas num gráfico, lucro subindo e caixa estável.</div></div></div>
+        <div class="line"><div class="lft">05<b>O espelho</b></div><div class="rgt">
+          <div class="on">Losses aren't automatically deductible either</div>
+          <div class="art">Texto: "An owner can generally only deduct losses up to their basis in the entity. Beyond that limit the loss suspends and waits — sometimes for years, until basis is restored." Arte: barra com um limite marcado, excedente esmaecido.</div></div></div>
+        <div class="line"><div class="lft">06<b>O que fazer<br>antes de dez</b></div><div class="rgt">
+          <div class="on">Three things that prevent the April version of this conversation</div>
+          <div class="art">Texto: "Know the projected allocation before year-end, not when the K-1 arrives. Agree with your partners, in writing, how tax distributions work. Track basis continuously instead of reconstructing it under deadline." Arte: três linhas com marcadores simples.</div></div></div>
+        <div class="line"><div class="lft">07<b>Pergunta</b></div><div class="rgt">
+          <div class="on">"Do you have a rough idea of what will be allocated to you this year — or will the K-1 be the first you hear of it?"</div>
+          <div class="art">Fundo claro, pergunta grande, logo KwikLedgers discreto no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">The business had its best year yet. You left the money in to fund growth. In April you owe tax on income that never reached your personal account.
+
+That's not a mistake. That's how pass-through taxation works, and it catches owners every year.
+
+Partnerships and S corporations don't pay federal income tax. They allocate income to the owners on a Schedule K-1, and the owner reports it personally — regardless of whether any cash moved.
+
+Allocated is not distributed. Your K-1 reports your share of what the entity earned, not your share of what it paid out.
+
+Which sets up a specific trap for businesses that are growing well. Growth consumes profit — inventory, equipment, headcount. The stronger the year, the larger the allocation, and the more likely the tax bill arrives with no deposit behind it.
+
+The same principle runs the other direction, and fewer people know this one: losses aren't automatically deductible either. You can generally only deduct a loss up to your basis in the entity. Past that, it suspends and waits.
+
+Three things prevent the April version of this conversation:
+
+Know the projected allocation before December, not when the K-1 lands.
+Agree with your partners, in writing, how tax distributions work.
+Track basis as you go instead of reconstructing it under deadline.
+
+The K-1s issued on September 15 are already moving toward individual returns due October 15. The allocation on them was decided months ago.
+
+Do you have a rough idea of what will be allocated to you this year — or will the K-1 be the first you hear of it?</div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 4 ============ -->
+<section class="sec" id="s4">
+  <div class="wrap">
+    <h2>Semana 4 — 21 a 25 de setembro</h2>
+
+    <article class="post prio" id="p7">
+      <div class="post-head">
+        <div class="tags"><span class="pill pdf">PDF · 8 páginas</span><span class="pill top">Prioritário</span><span class="pill val">validar fiscal</span></div>
+        <h3>The entity question a foreign founder should actually be asking</h3>
+        <p class="meta">22/set (ter) · publicar 9h–10h ET (10h–11h BRT) · PDF vertical 1080×1350 · 8 páginas</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Páginas do PDF — texto na peça + direção de arte</div>
+        <div class="line"><div class="lft">01<b>Capa</b></div><div class="rgt">
+          <div class="on">"Every entity comparison you've read was written for someone who lives here."</div>
+          <div class="art">Fundo escuro, tipografia grande. Sem logo.</div></div></div>
+        <div class="line"><div class="lft">02<b>O problema<br>da comparação</b></div><div class="rgt">
+          <div class="on">The usual comparison answers the wrong question</div>
+          <div class="art">Texto: "Flexibility, paperwork, investor readiness. All real considerations — and all written on the assumption that the owner is a US person. For a founder who isn't, a different variable outranks every one of them." Arte: uma tabela comparativa clássica com um X grande por cima.</div></div></div>
+        <div class="line"><div class="lft">03<b>A variável<br>que manda</b></div><div class="rgt">
+          <div class="on">Where you are taxed, not just how much</div>
+          <div class="art">Texto: "The structure you choose determines whether US income lands on you personally in the US system, how much is withheld before money leaves the country, and how the result interacts with your obligations at home." Arte: três engrenagens conectadas, rotuladas residência · retenção · país de origem.</div></div></div>
+        <div class="line"><div class="lft">04<b>Consequência 1</b></div><div class="rgt">
+          <div class="on">Personal exposure to the US system</div>
+          <div class="art">Texto: "Some structures push US income directly onto the owner's personal position in the US. Others keep it at the entity level. That single difference changes what you file, where, and under whose name." Arte: duas setas, uma indo para uma silhueta de pessoa, outra parando numa caixa.</div></div></div>
+        <div class="line"><div class="lft">05<b>Consequência 2</b></div><div class="rgt">
+          <div class="on">What happens when money leaves the country</div>
+          <div class="art">Texto: "Payments from a US entity to a foreign owner can carry withholding before they arrive. Whether they do, and at what rate, depends on the structure, the type of payment, and whether a tax treaty applies." Arte: uma linha cruzando uma fronteira com um pedaço destacado em âmbar.</div></div></div>
+        <div class="line"><div class="lft">06<b>Consequência 3</b></div><div class="rgt">
+          <div class="on">The other country has an opinion too</div>
+          <div class="art">Texto: "A structure that is efficient on the US side can create a worse result at home. The only meaningful evaluation is the combined one — and it is almost never the one people run." Arte: duas bandeiras estilizadas, sem identificação de país, com um sinal de igual entre elas.</div></div></div>
+        <div class="line"><div class="lft">07<b>A ordem<br>certa</b></div><div class="rgt">
+          <div class="on">Ask these before asking which entity</div>
+          <div class="art">Texto: "Where will you be a tax resident over the next three years? Will profit be distributed or reinvested? Will you have US employees or US customers, or neither? Do you need outside investment? The entity answer falls out of these." Arte: quatro perguntas numeradas em coluna.</div></div></div>
+        <div class="line"><div class="lft">08<b>Pergunta</b></div><div class="rgt">
+          <div class="on">"Was your structure chosen with both countries on the table — or only one?"</div>
+          <div class="art">Fundo claro, pergunta grande, logo KwikLedgers discreto no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">Every entity comparison you've read was written for someone who lives here.
+
+Flexibility. Paperwork. Investor readiness. Pass-through versus corporate treatment. All real considerations — and all built on the assumption that the owner is a US person.
+
+If you're not, a different variable outranks every one of them: where you end up being taxed, and under whose name.
+
+Three consequences the standard comparison doesn't cover.
+
+The first is personal exposure. Some structures push US income directly onto the owner's personal position inside the US system. Others keep it at the entity level. That difference decides what you file, where, and in whose name — before anyone talks about rates.
+
+The second is what happens when money leaves the country. Payments from a US entity to a foreign owner can carry withholding before they arrive. Whether they do, and how much, depends on the structure, the type of payment, and whether a treaty applies.
+
+The third is that the other country has an opinion. A structure that looks efficient on the US side can produce a worse combined result at home. The only evaluation that means anything is the combined one, and it's almost never the one that gets run.
+
+Which is why the entity question is the wrong place to start. These come first:
+
+Where will you be a tax resident over the next three years?
+Will profit be distributed, or reinvested?
+Will you have US employees, US customers, both, or neither?
+Do you need outside investment?
+
+Answer those four and the entity answer usually falls out on its own.
+
+Was your structure chosen with both countries on the table — or only one?</div>
+        <div class="callout warn"><b>Validação fiscal obrigatória.</b> O rascunho foi escrito de propósito no nível conceitual, sem citar tipo de entidade, alíquota de retenção, tratado específico ou regra brasileira. Confirmar com o fiscal: se querem manter assim, ou se preferem nomear estruturas e regras — e, nesse caso, quais exatamente. <b>Kleyton: as páginas 04, 05 e 06 mudam bastante conforme essa decisão. Vale segurar a arte delas até o retorno.</b></div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <article class="post" id="p8">
+      <div class="post-head">
+        <div class="tags"><span class="pill est">Estático · 1 imagem</span><span class="pill val">validar fiscal</span></div>
+        <h3>Your registered agent is not an office</h3>
+        <p class="meta">24/set (qui) · publicar 9h–10h ET (10h–11h BRT) · imagem estática 1080×1350</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Arte — o que vai na imagem</div>
+        <div class="line"><div class="lft">Fundo</div><div class="rgt"><div class="art">Fundo escuro sólido. Composição em duas metades separadas por um espaço vazio generoso — a distância entre os dois elementos é o conteúdo da peça.</div></div></div>
+        <div class="line"><div class="lft">Metade<b>esquerda</b></div><div class="rgt">
+          <div class="on">REGISTERED AGENT</div>
+          <div class="art">Um marcador de endereço simples, sozinho, em cinza-azulado. Abaixo, em corpo pequeno: "an address that receives official mail". Elemento pequeno e isolado.</div></div></div>
+        <div class="line"><div class="lft">Metade<b>direita</b></div><div class="rgt">
+          <div class="on">YOUR OPERATION</div>
+          <div class="art">Um agrupamento de elementos — pessoas, transações, contratos — em âmbar, visivelmente maior e mais denso que o marcador da esquerda. Abaixo, em corpo pequeno: "where the business actually happens".</div></div></div>
+        <div class="line"><div class="lft">Entre<b>as duas</b></div><div class="rgt">
+          <div class="on">"These are not the same thing."</div>
+          <div class="art">No espaço vazio central, em corpo pequeno e branco. Logo KwikLedgers no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">Every US entity needs a registered agent. Almost every foreign founder believes it means more than it does.
+
+Here is the actual job. A registered agent is a required point of contact inside the state — an address that can legally receive official documents and service of process on the company&#39;s behalf. That&#39;s it. It exists so the state and the courts always have somewhere to send things.
+
+It is a compliance requirement. It is not a business presence.
+
+What it does not do:
+
+It does not give your company an operating presence in that state.
+It does not determine where your business is considered to be doing business — that follows your activity, not your mailbox.
+It does not create substance for any purpose that asks about substance.
+It does not file anything on your behalf. Most agents forward mail; they don&#39;t act on it.
+
+Two consequences follow from that, and both catch people.
+
+The first is strategic. Choosing a state because the agent is cheap there doesn&#39;t change where you actually operate, and it doesn&#39;t change what that activity triggers elsewhere.
+
+The second is boring and worse. Official notices go to the agent&#39;s address. If the agent contract lapses, or the forwarding address is one you stopped checking three years ago, the notices still get delivered — legally, to you — and you never see them. Deadlines included.
+
+The agent is a mailbox with legal standing. It&#39;s worth knowing which of your assumptions are resting on it.
+
+Do you know what your registered agent actually does for your company — and what it doesn&#39;t?</div>
+        <div class="callout warn"><b>Validação fiscal obrigatória.</b> Confirmar antes de publicar: a descrição do papel do registered agent; a afirmação de que o local de operação segue a atividade e não o endereço do agente; e se o time quer ou não entrar no mérito de escolha de estado, que aqui aparece de forma genérica.</div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário.</div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ SEMANA 5 ============ -->
+<section class="sec" id="s5">
+  <div class="wrap">
+    <h2>Semana 5 — 28 a 30 de setembro</h2>
+
+    <article class="post prio" id="p9">
+      <div class="post-head">
+        <div class="tags"><span class="pill pdf">PDF · 8 páginas</span><span class="pill top">Prioritário</span><span class="pill obj">CTA comercial</span><span class="pill val">validar fiscal</span></div>
+        <h3>The company you stopped using didn&#39;t stop filing</h3>
+        <p class="meta">29/set (ter) · publicar 9h–10h ET (10h–11h BRT) · PDF vertical 1080×1350 · 8 páginas</p>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Páginas do PDF — texto na peça + direção de arte</div>
+        <div class="line"><div class="lft">01<b>Capa</b></div><div class="rgt">
+          <div class="on">"You stopped using the company. It never stopped having obligations."</div>
+          <div class="art">Fundo escuro, duas frases empilhadas, a segunda em âmbar. Sem logo nesta página.</div></div></div>
+        <div class="line"><div class="lft">02<b>O cenário</b></div><div class="rgt">
+          <div class="on">The most common version of this</div>
+          <div class="art">Texto: "You opened a US entity for a project, a client or a plan. It ran for a while, or never really started. Then priorities changed and you moved on. Nobody ever formally closed it." Arte: uma linha do tempo que começa cheia e vai ficando tracejada até sumir.</div></div></div>
+        <div class="line"><div class="lft">03<b>O que<br>continua</b></div><div class="rgt">
+          <div class="on">Inactivity is not a status the state recognizes</div>
+          <div class="art">Texto: "State-level filings and annual fees generally continue for as long as the entity exists, regardless of activity. Federal obligations can continue too — some of them apply to entities with no revenue at all." Arte: engrenagem girando sozinha num fundo vazio.</div></div></div>
+        <div class="line"><div class="lft">04<b>O silêncio</b></div><div class="rgt">
+          <div class="on">The notices arrive. They just don&#39;t arrive at you.</div>
+          <div class="art">Texto: "Official correspondence goes to the registered agent. If that contract lapsed, or the forwarding address is one you no longer check, delivery still counts as made. The obligations accumulate somewhere you are not looking." Arte: caixa de correio cheia, com uma carta caindo fora.</div></div></div>
+        <div class="line"><div class="lft">05<b>O primeiro<br>custo</b></div><div class="rgt">
+          <div class="on">Losing good standing</div>
+          <div class="art">Texto: "Good standing is the state&#39;s confirmation that the entity is active and current. Without it, banks close or refuse accounts, contracts signed in the company&#39;s name get questioned, and the liability protection you opened the entity for gets harder to defend." Arte: selo de "good standing" esmaecendo.</div></div></div>
+        <div class="line"><div class="lft">06<b>O segundo<br>custo</b></div><div class="rgt">
+          <div class="on">Administrative dissolution</div>
+          <div class="art">Texto: "Left long enough, the state can dissolve the entity on its own. The name becomes available to whoever wants it. Reinstating is possible in many cases, but it costs more than maintaining ever would have — and it is not always available on the same terms." Arte: nome de empresa riscado, com um cursor de outra pessoa ao lado.</div></div></div>
+        <div class="line"><div class="lft">07<b>A saída</b></div><div class="rgt">
+          <div class="on">Closing is a process, not an absence</div>
+          <div class="art">Texto: "Properly closing an entity means final filings, formal dissolution with the state, and cancelling the registrations attached to it. It takes work once. Abandoning it takes nothing and costs indefinitely." Arte: duas rotas — uma curta com um ponto final, outra longa e aberta que não termina.</div></div></div>
+        <div class="line"><div class="lft">08<b>Pergunta</b></div><div class="rgt">
+          <div class="on">"Do you have a US entity you no longer use — and do you know what it is still supposed to be filing?"</div>
+          <div class="art">Fundo claro, pergunta grande, logo KwikLedgers discreto no rodapé.</div></div></div>
+      </div>
+      <div class="post-sec">
+        <div class="seclabel">Legenda</div>
+        <div class="capbox">There is a specific kind of problem that only shows up years later, and it starts with a decision nobody remembers making.
+
+You opened a US entity. For a project, a client, a plan that made sense at the time. It ran for a while, or it never really started. Priorities changed, you moved on, and nobody ever formally closed it.
+
+In your head, the company stopped existing the day you stopped using it.
+
+Not to the state.
+
+Inactivity isn&#39;t a status. State filings and annual fees generally continue for as long as the entity exists, regardless of whether it earned a dollar. Some federal obligations continue too — including ones that apply specifically to entities with no activity.
+
+And here is what makes it quiet. Official correspondence goes to your registered agent. If that contract lapsed, or the forwarding address is one you stopped checking three years ago, delivery still counts as made. Legally, you were notified. In practice, nothing reached you.
+
+So the first thing you lose is good standing — the state&#39;s confirmation that the company is current. Without it, banks close or refuse accounts, contracts signed in the company&#39;s name get questioned, and the liability protection you opened the entity for becomes harder to defend.
+
+The second thing you can lose is the company. Left long enough, the state may dissolve it administratively, and the name goes back on the shelf. Reinstating is often possible. It just costs more than maintaining ever would have.
+
+None of this is dramatic while it&#39;s happening. That&#39;s the point — there is no moment where something goes wrong loudly enough to get your attention.
+
+Closing an entity properly is a process: final filings, formal dissolution with the state, cancelling what&#39;s attached to it. It takes work once. Abandoning it takes nothing, and keeps costing.
+
+Do you have a US entity you no longer use — and do you know what it&#39;s still supposed to be filing?</div>
+        <div class="callout warn"><b>Validação fiscal obrigatória.</b> Confirmar antes de escrever a peça final: quais obrigações estaduais e federais de fato continuam para uma entidade inativa; a redação sobre perda de good standing e seus efeitos; as condições de dissolução administrativa e de reinstatement; e se o time quer citar estados específicos ou manter genérico, como está aqui. <b>Kleyton: as páginas 03, 05 e 06 são as que mais podem mudar com o retorno.</b></div>
+        <div class="callout ok"><b>Fecha o mês e conversa com o post de 08/set sem repetir.</b> Aquele trata de empresa ativa que não declara; este, de empresa parada que continua devendo. São os dois lados do mesmo ponto cego.</div>
+        <div class="callout"><b>Link:</b> nenhum no corpo. Link do site no primeiro comentário — único CTA comercial do mês.</div>
+      </div>
+    </article>
+
+    <div class="divider"></div>
+  </div>
+</section>
+
+<!-- ============ PRODUÇÃO ============ -->
+<section class="sec" id="prod">
+  <div class="wrap">
+    <h2>Padrões de produção</h2>
+
+    <div class="callout ok" style="margin-top:0"><b>Horários de publicação:</b> padrão de 9h–10h ET (10h–11h BRT), terças e quintas. Exceção: 15/set sai entre 8h e 9h ET, por ser dia de prazo.</div>
+    <div class="callout info"><b>Link sempre no primeiro comentário, nunca no corpo do post.</b> Assim que o post subir, a página publica o comentário com o link.</div>
+    <div class="callout warn"><b>Toda legenda termina em pergunta</b>, sem exceção neste mês. As perguntas já estão escritas; não substituir por URL nem por chamada genérica. O único CTA comercial de setembro é o link no primeiro comentário do post de 29/set.</div>
+
+    <div class="cards4">
+      <div class="scard">
+        <h4>Especificações</h4>
+        <p>Todas as peças em 1080×1350 (vertical)</p>
+        <p>PDF exportado em páginas separadas, na ordem indicada</p>
+        <p>Fonte legível em tela pequena — o LinkedIn abre o PDF reduzido no feed</p>
+        <p>Maioria em fundo escuro; 10/set e 15/set em fundo claro, de propósito</p>
+      </div>
+      <div class="scard">
+        <h4>Estrutura de PDF</h4>
+        <p>Página 1: afirmação ou número que provoca</p>
+        <p>Páginas 2–3: contexto e mecânica</p>
+        <p>Páginas 4–6: o dado concreto e o detalhe</p>
+        <p>Última página: pergunta, sem CTA e sem URL</p>
+      </div>
+      <div class="scard">
+        <h4>Estrutura de estático</h4>
+        <p>Uma ideia só, sem lista</p>
+        <p>Elemento visual que já explica o conceito sozinho</p>
+        <p>Texto curto de apoio, no máximo uma frase</p>
+        <p>O desenvolvimento vai todo na legenda</p>
+      </div>
+      <div class="scard">
+        <h4>Uso do logo</h4>
+        <p>Nunca na capa do PDF</p>
+        <p>Discreto no rodapé da última página</p>
+        <p>Nos estáticos, sempre no rodapé</p>
+        <p>Sem URL nas peças — o link vive no comentário</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:44px">Ordem de produção sugerida</h2>
+    <div class="callout"><b>1 · Comece pelos que não dependem de retorno:</b> 03/set, 10/set, 15/set e 17/set. São dois estáticos simples, um estático mínimo e um PDF de 7 páginas sem pendência.</div>
+    <div class="callout"><b>2 · Depois os cinco que dependem de validação fiscal:</b> 01/set, 08/set, 22/set, 24/set e 29/set. Em todos dá para adiantar capa, páginas de contexto e a peça de pergunta final; segure as páginas com número, regra ou formulário específico. Cada post diz quais são.</div>
+    <div class="callout"><b>3 · Os dois PDFs mais pesados do mês são o de 08/set e o de 29/set</b>, ambos com 8 páginas e ambos com pendência. Se precisar escolher por onde começar dentro do bloco de validação, comece por eles.</div>
+    <div class="callout warn"><b>Atenção ao 01/set:</b> é o primeiro post do mês e depende de validação. Se o retorno do fiscal não chegar a tempo, trocar de posição com o de 17/set, que não tem pendência — e não deixar a semana sem publicação.</div>
+
+    <footer>
+      <p>Calendário editorial LinkedIn · KwikLedgers · setembro 2026</p>
+      <p>9 posts · 5 semanas · 5 PDFs e 4 estáticos · conteúdo em inglês · peças 1080×1350</p>
+    </footer>
+  </div>
+</section>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var secs = tabs.map(function(t){ return document.getElementById(t.dataset.t); });
+  function mark(){
+    var y = window.pageYOffset + 110, idx = 0;
+    for (var i = 0; i < secs.length; i++){ if (secs[i] && secs[i].offsetTop <= y) idx = i; }
+    if (window.innerHeight + window.pageYOffset >= document.body.scrollHeight - 40){ idx = tabs.length - 1; }
+    tabs.forEach(function(t, i){ t.classList.toggle('on', i === idx); });
+  }
+  mark();
+  var pending = false;
+  window.addEventListener('scroll', function(){
+    if (pending) return; pending = true;
+    window.requestAnimationFrame(function(){ mark(); pending = false; });
+  }, {passive:true});
+  window.addEventListener('resize', mark);
+})();
+</script>
+
+</body>
+</html>
